@@ -18,9 +18,12 @@ Route::get('/', function () {
 });
 
 
-Route::get('user',[UserController::class,'list']);
+
 Route::get('create',[UserController::class,'create']);
 
 Route::post('loginsubmit',[UserController::class,'loginsubmit']);
 Route::post('createsubmit',[UserController::class,'createsubmit']);
 
+Route::group(['middleware'=>['logCheck']],function(){
+    Route::get('user',[UserController::class,'list']);
+});

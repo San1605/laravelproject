@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 
+use App\Models\User;
+use Session;
 
 class UserController extends Controller
 {
   function list(){
+    // return  Session::get('logData');
     $user=User::all();
      return view('userList',['user'=>$user]);
   }  
@@ -19,8 +21,6 @@ class UserController extends Controller
  
  public function createsubmit(Request $req){
           // print_r($req->input());
-    
-    
       $user=new User;
       $user->name=$req->name;
       $user->email=$req->email;
@@ -29,7 +29,8 @@ class UserController extends Controller
     $result=$user->save();
     
     if($result){
-        return redirect('/');
+        $req->session()->put('logData',[$req->input()]);
+        return redirect('/user');
     }
     else{
         return  print_r($req->input());
@@ -45,8 +46,10 @@ public  function loginsubmit(Request $req){
 ['password','=',$req->password],
 ]
     )->get();
+
    $req->session()->put('logData',[$req->input()]);
-   return redirect('/list');
+
+   return redirect('/user');
  }  
 
 
